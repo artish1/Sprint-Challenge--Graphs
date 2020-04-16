@@ -20,13 +20,20 @@ def get_random_direction(direction_list):
     return direction_list[random.randint(0, len(direction_list) - 1)]
 
 
+def graph_travel(player, direction, graph):
+    player.travel(direction)
+
+    graph.add_room(player.current_room)
+    graph.connect_room(prev_room, player.current_room, direction)
+
+
 # Load world
 world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -64,9 +71,17 @@ while not finished:
     # BFS ^
     if len(unexplored_directions) == 0:
         # TODO BFS to nearest room that has unexplored paths
+        found_path = graph.find_room_with_unexplored(player.current_room)
+        # TODO If BFS cannot find a room that has unexplored paths, it's finished.
+        if found_path == None:
+            finished = True
+        else:
+            directional_path = found_path[1]
+            # # Traverse to the room that we found with unexplored directions
+            for to_direction in directional_path:
+                graph_travel(player, to_direction, graph)
+                traversal_path.append(to_direction)
 
-        # TODO If BFS cannot find a room that has unexplored paths, it's done.
-        finished = True  # TODO Temporary
     else:
         # Get random unexplored direction
         random_direction = get_random_direction(unexplored_directions)
@@ -74,16 +89,13 @@ while not finished:
         # Preserve previous room to track connections
         prev_room = player.current_room
         # Travel
-        player.travel(random_direction)
-
-        graph.add_room(player.current_room)
-        graph.connect_room(prev_room, player.current_room, random_direction)
+        graph_travel(player, random_direction, graph)
         # Log direction
         traversal_path.append(random_direction)
 
 
-graph.print_rooms()
-print(traversal_path)
+# graph.print_rooms()
+# print(traversal_path)
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
