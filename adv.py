@@ -6,6 +6,15 @@ from graph import Graph
 import random
 from ast import literal_eval
 
+# Functions to organize code
+def get_unexplored_directions(room):
+    unexplored_directions = []
+    for direction in room.get_exits():
+        if graph.is_unexplored(room, direction):
+            unexplored_directions.append(direction)
+    return unexplored_directions
+
+
 # Load world
 world = World()
 
@@ -27,35 +36,48 @@ world.print_rooms()
 player = Player(world.starting_room)
 
 # Graph
-
 graph = Graph()
 graph.add_room(player.current_room)
 
-prev_room = player.current_room
-player.travel("n")
-graph.add_room(player.current_room)
-graph.connect_room(prev_room, player.current_room, "n")
 
-graph.print_rooms()
+# prev_room = player.current_room
+# player.travel("n")
+# graph.add_room(player.current_room)
+# graph.connect_room(prev_room, player.current_room, "n")
+
+# graph.print_rooms()
+
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+finished = False
+while not finished:
+    # Pick random unexplored direction from player's current room.
+    unexplored_directions = get_unexplored_directions(player.current_room)
+    # (Base Case ?) If room has no unexplored paths, walk back to nearest room that does contain an unexplored (?) path.
+    # BFS ^
+    if len(unexplored_directions) == 0:
+        # TODO BFS to nearest room that has unexplored paths
+        print("Found dead end")
+        # TODO If BFS cannot find a room that has unexplored paths, it's done.
+        finished = True  # TODO Temporary
+    else:
+        # Get random unexplored direction
+        random_direction = unexplored_directions[
+            random.randint(0, len(unexplored_directions) - 1)
+        ]
 
-# (Base Case ?) If room has no unexplored paths, walk back to nearest room that does contain an unexplored (?) path.
-# BFS ^
+        prev_room = player.current_room
+        # Travel
+        player.travel(random_direction)
+        graph.add_room(player.current_room)
+        graph.connect_room(prev_room, player.current_room, random_direction)
+        # Log direction
+        traversal_path.append(random_direction)
 
-# (Base case ?) If BFS cannot find a room that has unexplored paths, it's done.
 
-# Pick random unexplored direction from player's current room.
-unexplored_directions = []
-
-
-# Travel
-
-# Log direction
-
-# Loop ?
+graph.print_rooms()
 
 # TRAVERSAL TEST
 visited_rooms = set()

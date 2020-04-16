@@ -12,11 +12,11 @@ class Graph:
         }
 
     def add_room(self, room):
-        room_info = {}
-        for direction in room.get_exits():
-            room_info[direction] = "?"
-
-        self.rooms[room.id] = room_info
+        if not room.id in self.rooms:
+            room_info = {}
+            for direction in room.get_exits():
+                room_info[direction] = "?"
+            self.rooms[room.id] = room_info
 
     def connect_room(self, from_room, to_room, direction):
         if self.rooms[from_room.id] is None:
@@ -29,6 +29,8 @@ class Graph:
         opposite_dir = self.opposite_directions[direction]
         self.rooms[to_room.id][opposite_dir] = from_room.id
 
+    def is_unexplored(self, room, direction):
+        return self.rooms[room.id][direction] == '?'
 
     def print_rooms(self):
         print(self.rooms)
