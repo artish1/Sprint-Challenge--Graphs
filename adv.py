@@ -36,8 +36,8 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+# map_file = "maps/test_loop_fork.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
@@ -52,13 +52,6 @@ player = Player(world.starting_room)
 graph = Graph()
 graph.add_room(player.current_room)
 
-
-# prev_room = player.current_room
-# player.travel("n")
-# graph.add_room(player.current_room)
-# graph.connect_room(prev_room, player.current_room, "n")
-
-# graph.print_rooms()
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
@@ -93,8 +86,6 @@ while not finished:
         traversal_path.append(random_direction)
 
 
-# graph.print_rooms()
-# print(traversal_path)
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
