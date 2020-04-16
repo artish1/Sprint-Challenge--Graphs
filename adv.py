@@ -15,6 +15,11 @@ def get_unexplored_directions(room):
     return unexplored_directions
 
 
+# Made to a function for readability later on
+def get_random_direction(direction_list):
+    return direction_list[random.randint(0, len(direction_list) - 1)]
+
+
 # Load world
 world = World()
 
@@ -59,18 +64,18 @@ while not finished:
     # BFS ^
     if len(unexplored_directions) == 0:
         # TODO BFS to nearest room that has unexplored paths
-        print("Found dead end")
+
         # TODO If BFS cannot find a room that has unexplored paths, it's done.
         finished = True  # TODO Temporary
     else:
         # Get random unexplored direction
-        random_direction = unexplored_directions[
-            random.randint(0, len(unexplored_directions) - 1)
-        ]
+        random_direction = get_random_direction(unexplored_directions)
 
+        # Preserve previous room to track connections
         prev_room = player.current_room
         # Travel
         player.travel(random_direction)
+
         graph.add_room(player.current_room)
         graph.connect_room(prev_room, player.current_room, random_direction)
         # Log direction
@@ -78,7 +83,7 @@ while not finished:
 
 
 graph.print_rooms()
-
+print(traversal_path)
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
