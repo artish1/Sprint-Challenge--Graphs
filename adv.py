@@ -21,6 +21,7 @@ def get_random_direction(direction_list):
 
 
 def graph_travel(player, direction, graph):
+    prev_room = player.current_room
     player.travel(direction)
 
     graph.add_room(player.current_room)
@@ -33,9 +34,9 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-# map_file = "maps/test_loop_fork.txt"
+map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
@@ -86,8 +87,6 @@ while not finished:
         # Get random unexplored direction
         random_direction = get_random_direction(unexplored_directions)
 
-        # Preserve previous room to track connections
-        prev_room = player.current_room
         # Travel
         graph_travel(player, random_direction, graph)
         # Log direction

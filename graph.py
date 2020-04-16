@@ -20,12 +20,12 @@ class Graph:
             return None
 
     def connect_room(self, from_room, to_room, direction):
-        if self.rooms[from_room.id] is None:
+        if not from_room.id in self.rooms:
             return print(
                 "Cannot connect a room that has not been added to the group initially"
             )
 
-        if self.rooms[from_room.id][direction] is None:
+        if not direction in self.rooms[from_room.id]:
             return print(f"Room {from_room.id} does not have a {direction} direction!")
 
         self.rooms[from_room.id][direction] = to_room.id
